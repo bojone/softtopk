@@ -12,7 +12,7 @@ def softtopk(x, k):
     lse2 = lax.cumlogsumexp(-x_sort, axis=x.ndim - 1, reverse=True)
     lse2 = jnp.roll(lse2, -1, axis=-1).at[..., -1].set(-jnp.inf)
     km = k - jnp.arange(x.shape[-1] - 1, -1, -1)
-    x_lamb = lse1 - jnp.log(jnp.sqrt(km**2 + np.exp(lse1 + lse2)) + km)
+    x_lamb = lse1 - jnp.log(jnp.sqrt(km**2 + jnp.exp(lse1 + lse2)) + km)
     x_sort_ = jnp.roll(x_sort, -1, axis=-1).at[..., -1].set(jnp.inf)
     idxs = ((x_lamb <= x_sort_) & (x_lamb >= x_sort)).argmax(axis=-1)
     lamb = jnp.take_along_axis(x_lamb, idxs[..., None], axis=-1)
