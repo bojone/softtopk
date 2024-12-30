@@ -16,7 +16,7 @@ def softtopk(x, k):
     x_sort_ = jnp.roll(x_sort, -1, axis=-1).at[..., -1].set(jnp.inf)
     idxs = ((x_lamb <= x_sort_) & (x_lamb >= x_sort)).argmax(axis=-1)
     lamb = jnp.take_along_axis(x_lamb, idxs[..., None], axis=-1)
-    p = (1 - np.exp(-np.abs(x - lamb))) * np.sign(x - lamb) * 0.5 + 0.5
+    p = (1 - jnp.exp(-jnp.abs(x - lamb))) * jnp.sign(x - lamb) * 0.5 + 0.5
     return p.astype(x.dtype)
 
 
